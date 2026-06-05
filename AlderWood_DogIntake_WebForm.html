@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>New Client Intake Form — Alderwood Pet Adventures</title>
+<style>
+  :root {
+    --forest:      #3B5C2F;
+    --sage:        #6B7A5E;
+    --new-growth:  #C0DD97;
+    --trail-dust:  #A89880;
+    --river-stone: #E8E4D8;
+    --dark:        #2C2A1E;
+    --dark-forest: #2C4A22;
+    --mid-sage:    #8FA882;
+    --light-sage:  #C8D8C0;
+    --amber:       #B8895A;
+    --white:       #ffffff;
+    --field-bg:    #F7F6F1;
+    --radius:      6px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+    color: var(--dark);
+    background: #f0ede4;
+    min-height: 100vh;
+  }
+
+  /* ── Header ── */
+  .site-header {
+    background: var(--forest);
+    border-bottom: 4px solid var(--new-growth);
+    padding: 20px 24px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-mark { width: 48px; height: 48px; flex-shrink: 0; }
+
+  .header-text { display: flex; flex-direction: column; gap: 2px; }
+  .header-name { font-size: 20px; font-weight: 700; color: white; line-height: 1; }
+  .header-sub  { font-size: 11px; color: var(--new-growth); letter-spacing: 0.12em; text-transform: uppercase; }
+  .header-contact { font-size: 12px; color: var(--light-sage); margin-top: 2px; }
+
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: var(--dark-forest);
+    padding: 10px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--new-growth);
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .progress-label { font-size: 12px; color: var(--light-sage); white-space: nowrap; }
+
+  /* ── Layout ── */
+  .form-container {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 28px 20px 60px;
+  }
+
+  /* ── Step pages ── */
+  .step { display: none; }
+  .step.active { display: block; }
+
+  /* ── Section card ── */
+  .section-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  .section-header {
+    background: var(--forest);
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-header h2 {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--new-growth);
+  }
+
+  .section-body { padding: 18px 18px 10px; }
+
+  /* ── Field rows ── */
+  .field-row {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+  .field-row.cols-1 { grid-template-columns: 1fr; }
+  .field-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .field-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+  @media (max-width: 560px) {
+    .field-row.cols-2,
+    .field-row.cols-3 { grid-template-columns: 1fr; }
+  }
+
+  .field-group { display: flex; flex-direction: column; gap: 5px; }
+
+  label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: 0.02em;
+  }
+
+  .hint {
+    font-size: 11px;
+    color: var(--trail-dust);
+    font-style: italic;
+    margin-top: -3px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid #ddd;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--dark);
+    background: var(--field-bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+  }
+
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(107,122,94,0.15);
+  }
+
+  input.error, textarea.error {
+    border-color: #c0392b;
+    box-shadow: 0 0 0 3px rgba(192,57,43,0.12);
+  }
+
+  textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+
+  /* ── Checkbox / radio grids ── */
+  .check-group { display: flex; flex-direction: column; gap: 5px; }
+  .check-label { font-size: 12px; font-weight: 700; color: var(--forest); margin-bottom: 6px; }
+
+  .check-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .check-item {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 6px 12px;
+    border: 1.5px solid #ddd;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 13px;
+    background: var(--field-bg);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .check-item:hover { border-color: var(--sage); background: #eef2eb; }
+
+  .check-item input[type="checkbox"],
+  .check-item input[type="radio"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--forest);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  .check-item.checked {
+    border-color: var(--forest);
+    background: #e6ede2;
+    color: var(--forest);
+    font-weight: 600;
+  }
+
+  /* ── Navigation ── */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--river-stone);
+    gap: 12px;
+  }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .btn-primary {
+    background: var(--forest);
+    color: white;
+  }
+  .btn-primary:hover { background: #2e4b24; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: var(--river-stone);
+    color: var(--dark);
+  }
+  .btn-secondary:hover { background: #d8d3c5; }
+
+  .btn-submit {
+    background: var(--amber);
+    color: white;
+  }
+  .btn-submit:hover { background: #9e7040; }
+
+  .step-indicator {
+    font-size: 13px;
+    color: var(--trail-dust);
+  }
+
+  /* ── Success screen ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  }
+
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--forest);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 32px;
+  }
+
+  .success-screen h2 {
+    font-size: 24px;
+    color: var(--forest);
+    margin-bottom: 12px;
+  }
+
+  .success-screen p {
+    color: var(--sage);
+    font-size: 15px;
+    line-height: 1.7;
+    max-width: 480px;
+    margin: 0 auto 10px;
+  }
+
+  /* ── Required marker ── */
+  .req { color: var(--amber); margin-left: 2px; }
+
+  /* ── Divider ── */
+  .divider { height: 1px; background: var(--river-stone); margin: 14px 0; }
+
+  /* ── Intro card ── */
+  .intro-card {
+    background: var(--dark-forest);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 22px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .intro-icon { font-size: 22px; flex-shrink: 0; }
+  .intro-text { color: var(--light-sage); font-size: 13.5px; line-height: 1.65; }
+  .intro-text strong { color: var(--new-growth); display: block; margin-bottom: 4px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="site-header">
+  <svg class="logo-mark" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="36" cy="36" r="34" fill="#6B7A5E"/>
+    <path d="M36 16 L36 52" stroke="#C0DD97" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M36 26 L26 18" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M36 22 L28 14" stroke="#8FA882" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M36 26 L46 18" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M36 22 L44 14" stroke="#8FA882" stroke-width="1.8" stroke-linecap="round"/>
+    <path d="M36 34 L24 26" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+    <path d="M36 34 L48 26" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+    <circle cx="33" cy="47" r="2" fill="#C0DD97"/>
+    <circle cx="39" cy="47" r="2" fill="#C0DD97"/>
+    <circle cx="36" cy="50" r="2" fill="#C0DD97"/>
+    <circle cx="36" cy="36" r="34" stroke="#8FA882" stroke-width="1"/>
+  </svg>
+  <div class="header-text">
+    <div class="header-name">Alderwood Pet Adventures</div>
+    <div class="header-sub">New Client Intake — Dog</div>
+    <div class="header-contact">(206) 399-2676 &nbsp;·&nbsp; Mill Creek · Bothell · Lynnwood · Everett · Edmonds</div>
+  </div>
+</header>
+
+<!-- ── Progress ── -->
+<div class="progress-wrap">
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:20%"></div></div>
+  <div class="progress-label" id="progressLabel">Step 1 of 5</div>
+</div>
+
+<div class="form-container">
+
+  <!-- ══════════════════════════════════ STEP 1: Owner & Pet ═══ -->
+  <div class="step active" id="step-1">
+    <div class="intro-card">
+      <div class="intro-icon">🐾</div>
+      <div class="intro-text">
+        <strong>Welcome! Let's get started.</strong>
+        This form takes about 8–10 minutes to complete. All information is kept confidential
+        and is used solely to provide the best care for your pet. Fields marked <span style="color:var(--new-growth)">*</span> are required.
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Owner Information</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Owner Name <span class="req">*</span></label>
+            <input type="text" name="owner_name" placeholder="Full name" required>
+          </div>
+          <div class="field-group">
+            <label>Today's Date</label>
+            <input type="date" name="date">
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Street Address</label>
+            <input type="text" name="address" placeholder="123 Trail Rd">
+          </div>
+          <div class="field-group">
+            <label>City / Zip</label>
+            <input type="text" name="city_zip" placeholder="Mill Creek, 98012">
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Primary Phone <span class="req">*</span></label>
+            <input type="tel" name="phone_primary" placeholder="(425) 000-0000" required>
+          </div>
+          <div class="field-group">
+            <label>Secondary Phone</label>
+            <input type="tel" name="phone_secondary" placeholder="(425) 000-0000">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" name="email" placeholder="you@email.com" required>
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Referred by</label>
+            <input type="text" name="referred_by" placeholder="Name or platform">
+          </div>
+          <div class="field-group">
+            <label>Rover / Platform Username</label>
+            <input type="text" name="rover_username" placeholder="@username">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Emergency Contact</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Name <span class="req">*</span></label>
+            <input type="text" name="emerg_name" required>
+          </div>
+          <div class="field-group">
+            <label>Relationship</label>
+            <input type="text" name="emerg_relationship" placeholder="Spouse, sibling, neighbor...">
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Phone <span class="req">*</span></label>
+            <input type="tel" name="emerg_phone" required>
+          </div>
+          <div class="field-group">
+            <label>Authorized to make care decisions?</label>
+            <select name="emerg_authorized">
+              <option value="">Select...</option>
+              <option>Yes</option>
+              <option>Yes, for minor decisions only</option>
+              <option>No — contact owner first</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Veterinarian / Clinic Name <span class="req">*</span></label>
+            <input type="text" name="vet_name" required>
+          </div>
+          <div class="field-group">
+            <label>Clinic Phone <span class="req">*</span></label>
+            <input type="tel" name="vet_phone" required>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Clinic Address</label>
+            <input type="text" name="vet_address">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Pet Profile</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Dog's Name <span class="req">*</span></label>
+            <input type="text" name="dog_name" required>
+          </div>
+          <div class="field-group">
+            <label>Nickname(s)</label>
+            <input type="text" name="dog_nickname">
+          </div>
+        </div>
+        <div class="field-row cols-3">
+          <div class="field-group">
+            <label>Breed</label>
+            <input type="text" name="breed">
+          </div>
+          <div class="field-group">
+            <label>Age</label>
+            <input type="text" name="age" placeholder="e.g. 3 years">
+          </div>
+          <div class="field-group">
+            <label>Weight (approx.)</label>
+            <input type="text" name="weight" placeholder="e.g. 45 lbs">
+          </div>
+        </div>
+        <div class="field-row cols-3">
+          <div class="field-group">
+            <label>Color / Markings</label>
+            <input type="text" name="markings">
+          </div>
+          <div class="field-group">
+            <label>Spayed / Neutered?</label>
+            <select name="spayed"><option value="">Select...</option><option>Yes</option><option>No</option><option>Unknown</option></select>
+          </div>
+          <div class="field-group">
+            <label>Microchipped?</label>
+            <select name="microchipped"><option value="">Select...</option><option>Yes</option><option>No</option><option>Unknown</option></select>
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <div class="check-label">Sex</div>
+            <div class="check-grid" data-type="radio" data-name="sex">
+              <label class="check-item"><input type="radio" name="sex" value="Male"> Male</label>
+              <label class="check-item"><input type="radio" name="sex" value="Female"> Female</label>
+            </div>
+          </div>
+          <div class="field-group">
+            <label>Microchip # (if applicable)</label>
+            <input type="text" name="microchip_num">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div></div>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="step-indicator">Step 1 of 5</span>
+        <button class="btn btn-primary" onclick="goTo(2)">Next: Food &amp; Exercise →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ STEP 2: Food & Exercise ═ -->
+  <div class="step" id="step-2">
+    <div class="section-card">
+      <div class="section-header"><h2>Food &amp; Treats</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Food brand / type</label>
+            <input type="text" name="food_brand" placeholder="e.g. Purina Pro Plan">
+          </div>
+          <div class="field-group">
+            <label>Portion size</label>
+            <input type="text" name="food_portion" placeholder="e.g. 1 cup">
+          </div>
+        </div>
+        <div class="field-row cols-3">
+          <div class="field-group">
+            <label>Feeding schedule</label>
+            <input type="text" name="feed_schedule" placeholder="e.g. Twice daily">
+          </div>
+          <div class="field-group">
+            <label>Morning time</label>
+            <input type="text" name="feed_am" placeholder="e.g. 7:00am">
+          </div>
+          <div class="field-group">
+            <label>Evening time</label>
+            <input type="text" name="feed_pm" placeholder="e.g. 5:30pm">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Approved treats</label>
+            <div class="hint">Brands or types your dog enjoys</div>
+            <input type="text" name="approved_treats">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Foods / treats to AVOID</label>
+            <div class="hint">Allergies, sensitivities, or owner preference</div>
+            <input type="text" name="avoid_treats">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:14px">
+          <div class="check-label">Water access</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="water_access" value="Always available"> Always available</label>
+            <label class="check-item"><input type="radio" name="water_access" value="Controlled portions"> Controlled portions</label>
+            <label class="check-item"><input type="radio" name="water_access" value="Specific times"> Specific times</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Special dietary notes</label>
+            <textarea name="diet_notes" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Exercise &amp; Walk Style</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Typical daily exercise</label>
+            <input type="text" name="daily_exercise" placeholder="e.g. 2 walks + backyard play">
+          </div>
+          <div class="field-group">
+            <label>Preferred walk duration</label>
+            <input type="text" name="walk_duration" placeholder="e.g. 30 min, 60 min">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Leash behavior</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="leash" value="Pulls hard"> Pulls hard</label>
+            <label class="check-item"><input type="checkbox" name="leash" value="Pulls occasionally"> Pulls occasionally</label>
+            <label class="check-item"><input type="checkbox" name="leash" value="Walks well"> Walks well</label>
+            <label class="check-item"><input type="checkbox" name="leash" value="Needs work"> Needs work</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Walk style preference</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="walk_style" value="Steady pace"> Steady pace</label>
+            <label class="check-item"><input type="checkbox" name="walk_style" value="Sniff & explore"> Sniff &amp; explore</label>
+            <label class="check-item"><input type="checkbox" name="walk_style" value="Brisk / exercise-focused"> Brisk / exercise</label>
+            <label class="check-item"><input type="checkbox" name="walk_style" value="Mix"> Mix</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Reaction to other dogs</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="dog_reaction" value="Friendly"> Friendly</label>
+            <label class="check-item"><input type="checkbox" name="dog_reaction" value="Selective"> Selective</label>
+            <label class="check-item"><input type="checkbox" name="dog_reaction" value="Reactive"> Reactive / leash reactive</label>
+            <label class="check-item"><input type="checkbox" name="dog_reaction" value="Fearful"> Fearful</label>
+            <label class="check-item"><input type="checkbox" name="dog_reaction" value="Unknown"> Unknown</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Reaction to strangers</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="stranger_reaction" value="Friendly"> Friendly</label>
+            <label class="check-item"><input type="checkbox" name="stranger_reaction" value="Cautious"> Cautious</label>
+            <label class="check-item"><input type="checkbox" name="stranger_reaction" value="Jumps up"> Jumps up</label>
+            <label class="check-item"><input type="checkbox" name="stranger_reaction" value="Fearful"> Fearful</label>
+            <label class="check-item"><input type="checkbox" name="stranger_reaction" value="Protective"> Protective</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Off-leash reliability</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="offleash" value="Excellent"> Excellent</label>
+            <label class="check-item"><input type="radio" name="offleash" value="Enclosed areas only"> Enclosed areas only</label>
+            <label class="check-item"><input type="radio" name="offleash" value="Not reliable"> Not reliable</label>
+            <label class="check-item"><input type="radio" name="offleash" value="Never off-leash"> Never off-leash</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Favorite parks / routes</label>
+            <input type="text" name="fav_routes">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Areas or triggers to avoid on walks</label>
+            <input type="text" name="avoid_routes">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="step-indicator">Step 2 of 5</span>
+        <button class="btn btn-primary" onclick="goTo(3)">Next: Play &amp; Personality →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ STEP 3: Play & Personality ═ -->
+  <div class="step" id="step-3">
+    <div class="section-card">
+      <div class="section-header"><h2>Play Style &amp; Enrichment</h2></div>
+      <div class="section-body">
+        <div class="field-group" style="margin-bottom:14px">
+          <div class="check-label">Play style (check all that apply)</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="play_style" value="Fetch"> Fetch</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Tug"> Tug</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Chase"> Chase</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Wrestling"> Wrestling</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Solo play"> Solo play</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Puzzle toys"> Puzzle toys</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Sniff games"> Sniff games</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Water play"> Water play</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Cuddles / calm"> Cuddles / calm</label>
+            <label class="check-item"><input type="checkbox" name="play_style" value="Ball obsessed"> Ball obsessed</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Favorite toys (specific)</label>
+            <div class="hint">Names, types, or brands</div>
+            <input type="text" name="fav_toys">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Toys / games to avoid</label>
+            <input type="text" name="avoid_toys">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:14px">
+          <div class="check-label">Energy level</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="energy_level" value="Low"> Low</label>
+            <label class="check-item"><input type="radio" name="energy_level" value="Moderate"> Moderate</label>
+            <label class="check-item"><input type="radio" name="energy_level" value="High"> High</label>
+            <label class="check-item"><input type="radio" name="energy_level" value="Very high / needs a job"> Very high / needs a job</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Anything else about how your dog likes to play or be enriched</label>
+            <textarea name="play_notes" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Personality &amp; Behavior</h2></div>
+      <div class="section-body">
+        <div class="field-group" style="margin-bottom:14px">
+          <div class="check-label">Best describes your dog (check all that apply)</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="personality" value="Confident"> Confident</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Shy / timid"> Shy / timid</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Social butterfly"> Social butterfly</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Selective with dogs"> Selective with dogs</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Velcro dog"> Velcro dog</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Independent"> Independent</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Anxious / nervous"> Anxious / nervous</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Food motivated"> Food motivated</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Toy motivated"> Toy motivated</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Praise motivated"> Praise motivated</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Stubborn"> Stubborn</label>
+            <label class="check-item"><input type="checkbox" name="personality" value="Eager to please"> Eager to please</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Separation anxiety</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="sep_anxiety" value="None"> None</label>
+            <label class="check-item"><input type="radio" name="sep_anxiety" value="Mild"> Mild</label>
+            <label class="check-item"><input type="radio" name="sep_anxiety" value="Moderate"> Moderate</label>
+            <label class="check-item"><input type="radio" name="sep_anxiety" value="Severe"> Severe</label>
+            <label class="check-item"><input type="radio" name="sep_anxiety" value="Unknown"> Unknown</label>
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <div class="check-label">Good with children?</div>
+            <div class="check-grid">
+              <label class="check-item"><input type="radio" name="with_kids" value="Yes"> Yes</label>
+              <label class="check-item"><input type="radio" name="with_kids" value="With supervision"> With supervision</label>
+              <label class="check-item"><input type="radio" name="with_kids" value="No"> No</label>
+              <label class="check-item"><input type="radio" name="with_kids" value="Unknown"> Unknown</label>
+            </div>
+          </div>
+          <div class="field-group">
+            <div class="check-label">Good with cats?</div>
+            <div class="check-grid">
+              <label class="check-item"><input type="radio" name="with_cats" value="Yes"> Yes</label>
+              <label class="check-item"><input type="radio" name="with_cats" value="With supervision"> With supervision</label>
+              <label class="check-item"><input type="radio" name="with_cats" value="No"> No</label>
+              <label class="check-item"><input type="radio" name="with_cats" value="Unknown"> Unknown</label>
+            </div>
+          </div>
+        </div>
+        <div class="field-row cols-1" style="margin-top:12px">
+          <div class="field-group">
+            <label>Anything that frightens or stresses your dog</label>
+            <div class="hint">Storms, loud noises, hats, bikes, skateboards, etc.</div>
+            <textarea name="stress_triggers" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(2)">← Back</button>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="step-indicator">Step 3 of 5</span>
+        <button class="btn btn-primary" onclick="goTo(4)">Next: Training &amp; Home →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ STEP 4: Training & Home ═ -->
+  <div class="step" id="step-4">
+    <div class="section-card">
+      <div class="section-header"><h2>Training &amp; Commands</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Commands your dog knows reliably</label>
+            <div class="hint">sit, stay, leave it, place, down, come, etc.</div>
+            <input type="text" name="commands_known">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Commands in progress / needs reinforcement</label>
+            <input type="text" name="commands_wip">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Cue word(s) for potty</label>
+            <div class="hint">e.g. "go potty", "outside", "business"</div>
+            <input type="text" name="potty_cue">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Training method used at home</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="training_method" value="Reward / positive"> Reward / positive</label>
+            <label class="check-item"><input type="checkbox" name="training_method" value="Clicker"> Clicker</label>
+            <label class="check-item"><input type="checkbox" name="training_method" value="Voice correction"> Voice correction</label>
+            <label class="check-item"><input type="checkbox" name="training_method" value="E-collar"> E-collar</label>
+            <label class="check-item"><input type="checkbox" name="training_method" value="Mixed"> Mixed</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Anything walker should continue reinforcing</label>
+            <input type="text" name="reinforce">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Behaviors you are actively working to improve</label>
+            <div class="hint">Jumping, pulling, barking, resource guarding, etc.</div>
+            <textarea name="behaviors_improve" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Home Routine &amp; Environment</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Typical wake-up time</label>
+            <input type="text" name="wake_time" placeholder="e.g. 6:30am">
+          </div>
+          <div class="field-group">
+            <label>Bedtime</label>
+            <input type="text" name="bed_time" placeholder="e.g. 10pm">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Where does dog sleep</label>
+            <div class="hint">Bed, crate, couch, floor, etc.</div>
+            <input type="text" name="dog_sleeps">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Crate trained?</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="crate_trained" value="Yes — loves it"> Yes — loves it</label>
+            <label class="check-item"><input type="radio" name="crate_trained" value="Yes — tolerates"> Yes — tolerates</label>
+            <label class="check-item"><input type="radio" name="crate_trained" value="In progress"> In progress</label>
+            <label class="check-item"><input type="radio" name="crate_trained" value="No"> No</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Access areas in home</label>
+            <div class="hint">Which rooms are allowed / off-limits</div>
+            <input type="text" name="home_access">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Potty schedule</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="potty_schedule" value="Free access outside"> Free access outside</label>
+            <label class="check-item"><input type="checkbox" name="potty_schedule" value="Scheduled trips"> Scheduled trips</label>
+            <label class="check-item"><input type="checkbox" name="potty_schedule" value="Bell trained"> Bell trained</label>
+            <label class="check-item"><input type="checkbox" name="potty_schedule" value="Pee pad trained"> Pee pad trained</label>
+          </div>
+        </div>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Last potty before walker arrives</label>
+            <input type="text" name="last_potty" placeholder="e.g. 7:00am">
+          </div>
+          <div class="field-group">
+            <label>Expected next potty</label>
+            <input type="text" name="next_potty" placeholder="e.g. noon">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Other pets in home</label>
+            <div class="hint">Names, species, any dynamics to know</div>
+            <input type="text" name="other_pets">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Transportation (if applicable)</h2></div>
+      <div class="section-body">
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Transport needed?</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="transport_needed" value="Yes"> Yes</label>
+            <label class="check-item"><input type="radio" name="transport_needed" value="No"> No</label>
+            <label class="check-item"><input type="radio" name="transport_needed" value="Occasionally"> Occasionally</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Preferred travel method</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="checkbox" name="travel_method" value="Crate in vehicle"> Crate in vehicle</label>
+            <label class="check-item"><input type="checkbox" name="travel_method" value="Seatbelt harness"> Seatbelt harness</label>
+            <label class="check-item"><input type="checkbox" name="travel_method" value="Car seat"> Car seat</label>
+            <label class="check-item"><input type="checkbox" name="travel_method" value="Free in back seat"> Free in back seat</label>
+            <label class="check-item"><input type="checkbox" name="travel_method" value="No preference"> No preference</label>
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Crate / carrier supplied by</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="carrier_supply" value="Owner provides"> Owner provides</label>
+            <label class="check-item"><input type="radio" name="carrier_supply" value="Walker provides"> Walker provides</label>
+            <label class="check-item"><input type="radio" name="carrier_supply" value="N/A"> N/A</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Any car anxiety or motion sickness?</label>
+            <input type="text" name="car_anxiety">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(3)">← Back</button>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="step-indicator">Step 4 of 5</span>
+        <button class="btn btn-primary" onclick="goTo(5)">Next: Health &amp; Final Notes →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ STEP 5: Health & Submit ═ -->
+  <div class="step" id="step-5">
+    <div class="section-card">
+      <div class="section-header"><h2>Health &amp; Medical Notes</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Known allergies</label>
+            <div class="hint">Food, environmental, flea prevention, etc.</div>
+            <input type="text" name="allergies">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Current medications</label>
+            <div class="hint">Name, dose, frequency</div>
+            <input type="text" name="medications">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Medication administration instructions</label>
+            <input type="text" name="med_instructions">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Physical limitations / recent injuries</label>
+            <input type="text" name="physical_limits">
+          </div>
+        </div>
+        <div class="field-group" style="margin-bottom:12px">
+          <div class="check-label">Up to date on vaccines?</div>
+          <div class="check-grid">
+            <label class="check-item"><input type="radio" name="vaccines" value="Yes"> Yes</label>
+            <label class="check-item"><input type="radio" name="vaccines" value="Partial"> Partial</label>
+            <label class="check-item"><input type="radio" name="vaccines" value="No"> No</label>
+            <label class="check-item"><input type="radio" name="vaccines" value="Unknown"> Unknown</label>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Last flea / tick prevention applied</label>
+            <input type="text" name="flea_tick" placeholder="e.g. June 1, 2025 — Frontline">
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Any other health notes walker should know</label>
+            <textarea name="health_notes" rows="2"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Special Instructions &amp; Requests</h2></div>
+      <div class="section-body">
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Instructions specific to your pet</label>
+            <div class="hint">Quirks, preferences, rituals that help them feel at ease</div>
+            <textarea name="pet_instructions" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Instructions for your home</label>
+            <div class="hint">Entry/exit code, where supplies are kept, alarm info — you can share sensitive details directly at the meet &amp; greet</div>
+            <textarea name="home_instructions" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="field-row cols-1">
+          <div class="field-group">
+            <label>Any concerns or questions for your walker</label>
+            <textarea name="concerns" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-card">
+      <div class="section-header"><h2>Authorization &amp; Submission</h2></div>
+      <div class="section-body">
+        <p style="font-size:13.5px;color:var(--sage);line-height:1.7;margin-bottom:14px;">
+          By submitting this form, I confirm the information provided is accurate to the best of my knowledge
+          and authorize Alderwood Pet Adventures to provide care for my pet as discussed during our meet &amp; greet.
+          I understand that all information will be kept confidential.
+        </p>
+        <div class="field-row cols-2">
+          <div class="field-group">
+            <label>Full Name (typed signature) <span class="req">*</span></label>
+            <input type="text" name="signature" placeholder="Type your full name" required>
+          </div>
+          <div class="field-group">
+            <label>Today's Date <span class="req">*</span></label>
+            <input type="date" name="sig_date" required>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="goTo(4)">← Back</button>
+      <div style="display:flex;align-items:center;gap:16px;">
+        <span class="step-indicator">Step 5 of 5</span>
+        <button class="btn btn-submit" onclick="submitForm()">Submit Form ✓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════ SUCCESS ═══════════════════ -->
+  <div class="success-screen" id="success-screen">
+    <div class="success-icon">🐾</div>
+    <h2>Thank you!</h2>
+    <p>Your intake form has been submitted. Rick will review your answers before your meet &amp; greet and reach out if he has any questions.</p>
+    <p style="margin-top:8px;"><strong style="color:var(--forest)">(206) 399-2676</strong></p>
+    <p style="font-size:13px;margin-top:16px;font-style:italic;color:var(--trail-dust)">"Rooted here. Ready for anything."</p>
+  </div>
+
+</div><!-- /form-container -->
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 5;
+  const progressPcts = [20, 40, 60, 80, 100];
+
+  function goTo(step) {
+    // Validate required fields on current step before advancing
+    if (step > currentStep) {
+      const current = document.getElementById('step-' + currentStep);
+      const required = current.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(el => {
+        el.classList.remove('error');
+        if (!el.value.trim()) {
+          el.classList.add('error');
+          valid = false;
+        }
+      });
+      if (!valid) {
+        const first = current.querySelector('.error');
+        if (first) first.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+    }
+
+    document.getElementById('step-' + currentStep).classList.remove('active');
+    currentStep = step;
+    document.getElementById('step-' + currentStep).classList.add('active');
+
+    document.getElementById('progressFill').style.width = progressPcts[step - 1] + '%';
+    document.getElementById('progressLabel').textContent = 'Step ' + step + ' of ' + totalSteps;
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Visual check for checkbox/radio pill styling
+  document.querySelectorAll('.check-item input').forEach(input => {
+    input.addEventListener('change', function() {
+      const name = this.name;
+      const type = this.type;
+      if (type === 'radio') {
+        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+          r.closest('.check-item').classList.toggle('checked', r.checked);
+        });
+      } else {
+        this.closest('.check-item').classList.toggle('checked', this.checked);
+      }
+    });
+  });
+
+  function submitForm() {
+    const step5 = document.getElementById('step-5');
+    const required = step5.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(el => {
+      el.classList.remove('error');
+      if (!el.value.trim()) {
+        el.classList.add('error');
+        valid = false;
+      }
+    });
+    if (!valid) {
+      step5.querySelector('.error').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    // Collect all form data for display / sending
+    const data = {};
+    document.querySelectorAll('input, textarea, select').forEach(el => {
+      if (!el.name) return;
+      if (el.type === 'checkbox') {
+        if (!data[el.name]) data[el.name] = [];
+        if (el.checked) data[el.name].push(el.value);
+      } else if (el.type === 'radio') {
+        if (el.checked) data[el.name] = el.value;
+      } else {
+        data[el.name] = el.value;
+      }
+    });
+
+    // In production: POST data to your form handler (Formspree, Netlify Forms, etc.)
+    // fetch('/submit-intake', { method: 'POST', body: JSON.stringify(data) })
+
+    console.log('Form data:', data);
+
+    // Show success
+    document.getElementById('step-5').classList.remove('active');
+    const success = document.getElementById('success-screen');
+    success.style.display = 'block';
+    document.getElementById('progressFill').style.width = '100%';
+    document.getElementById('progressLabel').textContent = 'Complete!';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
