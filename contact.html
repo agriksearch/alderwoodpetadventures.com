@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Alderwood Pet Adventures</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:      #3B5C2F;
+    --dark-forest: #2C4A22;
+    --sage:        #6B7A5E;
+    --new-growth:  #C0DD97;
+    --trail-dust:  #A89880;
+    --river-stone: #E8E4D8;
+    --amber:       #B8895A;
+    --dark:        #2C2A1E;
+    --light-sage:  #C8D8C0;
+    --mid-sage:    #8FA882;
+    --white:       #ffffff;
+    --field-bg:    #F7F6F1;
+    --radius:      8px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "DM Sans", sans-serif;
+    background: #f0ede4;
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 200;
+    background: rgba(43, 74, 34, 0.97);
+    backdrop-filter: blur(8px);
+    border-bottom: 2px solid var(--new-growth);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 64px;
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-logo { width: 36px; height: 36px; }
+
+  .nav-name {
+    font-family: "Playfair Display", serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--white);
+  }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .nav-link {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--light-sage);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .nav-link:hover { color: var(--new-growth); }
+  .nav-link.active { color: var(--new-growth); }
+
+  .nav-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--new-growth);
+    color: var(--dark-forest);
+    font-weight: 600;
+    font-size: 14px;
+    padding: 10px 22px;
+    border-radius: 40px;
+    text-decoration: none;
+    transition: transform 0.15s, background 0.15s;
+  }
+
+  .nav-cta:hover { background: #d4f0a8; transform: translateY(-1px); }
+
+  /* ── PAGE HEADER ── */
+  .page-header {
+    padding-top: 64px;
+    background: var(--dark-forest);
+    text-align: center;
+    padding-bottom: 64px;
+  }
+
+  .page-header-inner { padding: 64px 40px 0; }
+
+  .page-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--mid-sage);
+    margin-bottom: 16px;
+  }
+
+  .page-title {
+    font-family: "Playfair Display", serif;
+    font-size: clamp(36px, 5vw, 56px);
+    font-weight: 900;
+    color: var(--white);
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+
+  .page-title em {
+    font-style: italic;
+    color: var(--new-growth);
+  }
+
+  .page-body {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--light-sage);
+    line-height: 1.75;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  /* ── CONTACT LAYOUT ── */
+  .contact-wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 72px 32px 96px;
+    display: grid;
+    grid-template-columns: 1fr 1.6fr;
+    gap: 64px;
+    align-items: start;
+  }
+
+  /* ── SIDEBAR ── */
+  .contact-sidebar {}
+
+  .sidebar-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 20px;
+  }
+
+  .contact-method {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  .contact-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--forest);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .contact-icon svg {
+    width: 18px;
+    height: 18px;
+    stroke: var(--new-growth);
+    fill: none;
+    stroke-width: 2.2;
+  }
+
+  .contact-method-text {}
+
+  .contact-method-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 4px;
+  }
+
+  .contact-method-value {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--forest);
+    text-decoration: none;
+    display: block;
+    transition: color 0.15s;
+  }
+
+  .contact-method-value:hover { color: var(--dark-forest); }
+
+  .contact-method-sub {
+    font-size: 13px;
+    color: var(--trail-dust);
+    margin-top: 3px;
+    font-weight: 300;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--river-stone);
+    margin: 28px 0;
+  }
+
+  .intake-nudge {
+    background: var(--dark-forest);
+    border-radius: 12px;
+    padding: 24px;
+  }
+
+  .intake-nudge-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--new-growth);
+    margin-bottom: 8px;
+  }
+
+  .intake-nudge-body {
+    font-size: 13px;
+    color: var(--light-sage);
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 16px;
+  }
+
+  .intake-nudge-link {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--new-growth);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    border-bottom: 1px solid rgba(192,221,151,0.3);
+    padding-bottom: 2px;
+    transition: border-color 0.15s;
+  }
+
+  .intake-nudge-link:hover { border-color: var(--new-growth); }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 40px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+
+  .form-card h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--forest);
+    margin-bottom: 8px;
+  }
+
+  .form-card p {
+    font-size: 14px;
+    color: var(--sage);
+    margin-bottom: 28px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .field-row .field-group { margin-bottom: 0; }
+
+  label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--forest);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .req { color: var(--amber); margin-left: 2px; }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid #ddd;
+    border-radius: var(--radius);
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--dark);
+    background: var(--field-bg);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    -webkit-appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--sage);
+    box-shadow: 0 0 0 3px rgba(107,122,94,0.15);
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.6;
+  }
+
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7A5E' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--forest);
+    color: var(--white);
+    font-size: 16px;
+    font-weight: 700;
+    font-family: inherit;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 8px;
+    letter-spacing: 0.02em;
+  }
+
+  .btn-submit:hover {
+    background: var(--dark-forest);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(59,92,47,0.2);
+  }
+
+  .form-note {
+    font-size: 12px;
+    color: var(--trail-dust);
+    text-align: center;
+    margin-top: 14px;
+    font-style: italic;
+  }
+
+  /* ── SUCCESS STATE ── */
+  .success-state {
+    display: none;
+    text-align: center;
+    padding: 48px 20px;
+  }
+
+  .success-icon {
+    font-size: 48px;
+    margin-bottom: 16px;
+  }
+
+  .success-state h3 {
+    font-family: "Playfair Display", serif;
+    font-size: 24px;
+    color: var(--forest);
+    margin-bottom: 12px;
+  }
+
+  .success-state p {
+    font-size: 15px;
+    color: var(--sage);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto 8px;
+    font-weight: 300;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--forest);
+    border-top: 3px solid var(--new-growth);
+    padding: 40px;
+    text-align: center;
+  }
+
+  .footer-name {
+    font-family: "Playfair Display", serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+
+  .footer-area {
+    font-size: 12px;
+    color: var(--mid-sage);
+    letter-spacing: 0.08em;
+    margin-bottom: 12px;
+  }
+
+  .footer-phone {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--new-growth);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 16px;
+  }
+
+  .footer-tagline {
+    font-style: italic;
+    font-size: 12px;
+    color: var(--sage);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .contact-wrap { grid-template-columns: 1fr; gap: 40px; }
+    .field-row { grid-template-columns: 1fr; }
+    .form-card { padding: 28px 20px; }
+    nav { padding: 0 16px; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="index.html" class="nav-brand">
+    <svg class="nav-logo" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="36" cy="36" r="34" fill="#6B7A5E"/>
+      <path d="M36 16 L36 52" stroke="#C0DD97" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M36 26 L26 18" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M36 22 L28 14" stroke="#8FA882" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M36 26 L46 18" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M36 22 L44 14" stroke="#8FA882" stroke-width="1.8" stroke-linecap="round"/>
+      <path d="M36 34 L24 26" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M36 34 L48 26" stroke="#C0DD97" stroke-width="2.2" stroke-linecap="round"/>
+      <circle cx="33" cy="47" r="2" fill="#C0DD97"/>
+      <circle cx="39" cy="47" r="2" fill="#C0DD97"/>
+      <circle cx="36" cy="50" r="2" fill="#C0DD97"/>
+    </svg>
+    <span class="nav-name">Alderwood Pet Adventures</span>
+  </div>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="gallery.html" class="nav-link">Gallery</a>
+    <a href="contact.html" class="nav-link active">Contact</a>
+    <a href="AlderWood_DogIntake_WebForm.html" class="nav-link">New Client</a>
+  </div>
+  <a href="tel:2063992676" class="nav-cta">
+    <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/>
+    </svg>
+    (206) 399-2676
+  </a>
+</nav>
+
+<!-- ── PAGE HEADER ── -->
+<div class="page-header">
+  <div class="page-header-inner">
+    <div class="page-eyebrow">Get in touch</div>
+    <h1 class="page-title">Let's talk about<br>your <em>dog.</em></h1>
+    <p class="page-body">Quick question or ready to book? Send a message and Rick will get back to you within a few hours.</p>
+  </div>
+</div>
+
+<!-- ── CONTACT LAYOUT ── -->
+<div class="contact-wrap">
+
+  <!-- Sidebar -->
+  <div class="contact-sidebar">
+    <div class="sidebar-label">Reach Rick directly</div>
+
+    <div class="contact-method">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.22 1.18 2 2 0 012.22 0h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+      </div>
+      <div class="contact-method-text">
+        <div class="contact-method-label">Call or Text</div>
+        <a href="tel:2063992676" class="contact-method-value">(206) 399-2676</a>
+        <div class="contact-method-sub">Fastest response</div>
+      </div>
+    </div>
+
+    <div class="contact-method">
+      <div class="contact-icon">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </div>
+      <div class="contact-method-text">
+        <div class="contact-method-label">Email</div>
+        <a href="mailto:contact@alderwoodpetadventures.com" class="contact-method-value" style="font-size:14px;">contact@alderwoodpetadventures.com</a>
+        <div class="contact-method-sub">Usually replies same day</div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="intake-nudge">
+      <div class="intake-nudge-title">Already ready to book?</div>
+      <div class="intake-nudge-body">Skip ahead and fill out the new client intake form. Rick will review it before your meet and greet.</div>
+      <a href="AlderWood_DogIntake_WebForm.html" class="intake-nudge-link">
+        Start intake form &rarr;
+      </a>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="form-card">
+    <h2>Send a message</h2>
+    <p>Tell Rick a little about your dog and what you need. No commitment — just a conversation.</p>
+
+    <form id="contact-form" action="https://formspree.io/f/xzdqaajy" method="POST">
+
+      <!-- Hidden fields for Formspree routing -->
+      <input type="hidden" name="_subject" value="New inquiry — Alderwood Pet Adventures">
+      <input type="hidden" name="_next" value="">
+
+      <div class="field-row">
+        <div class="field-group">
+          <label for="name">Your Name <span class="req">*</span></label>
+          <input type="text" id="name" name="name" placeholder="Full name" required>
+        </div>
+        <div class="field-group">
+          <label for="phone">Phone <span class="req">*</span></label>
+          <input type="tel" id="phone" name="phone" placeholder="(425) 000-0000" required>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="email">Email <span class="req">*</span></label>
+        <input type="email" id="email" name="email" placeholder="you@email.com" required>
+      </div>
+
+      <div class="field-group">
+        <label for="service">Service Needed <span class="req">*</span></label>
+        <select id="service" name="service" required>
+          <option value="">Select a service...</option>
+          <option>Dog Walk (30 min) — $30</option>
+          <option>Dog Walk (45 min) — $45</option>
+          <option>Adventure Walk (60 min) — $60</option>
+          <option>Drop-In Visit (20 min) — $20</option>
+          <option>Drop-In Visit (60 min) — $45</option>
+          <option>Overnight House Sit — $85/night</option>
+          <option>Daycare Transport — $25/trip</option>
+          <option>Trail Pass Bundle (10 walks) — $195</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+
+      <div class="field-row">
+        <div class="field-group">
+          <label for="dog_type">Type of Dog</label>
+          <input type="text" id="dog_type" name="dog_type" placeholder="e.g. Golden Retriever, 3 yrs">
+        </div>
+        <div class="field-group">
+          <label for="location">Your City</label>
+          <select id="location" name="location">
+            <option value="">Select your city...</option>
+            <option>Mill Creek</option>
+            <option>Bothell</option>
+            <option>Lynnwood</option>
+            <option>Everett</option>
+            <option>Edmonds</option>
+            <option>Other nearby area</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="message">Anything else Rick should know?</label>
+        <textarea id="message" name="message" placeholder="Your dog's name, schedule, questions..."></textarea>
+      </div>
+
+      <button type="submit" class="btn-submit">Send Message &rarr;</button>
+      <div class="form-note">Rick typically responds within a few hours. No spam, ever.</div>
+
+    </form>
+
+    <!-- Success state (shown after Formspree redirect) -->
+    <div class="success-state" id="success-state">
+      <div class="success-icon">🐾</div>
+      <h3>Message received!</h3>
+      <p>Rick will be in touch within a few hours. Check your email for a confirmation.</p>
+      <p style="margin-top:12px; font-size:13px;">Ready to move faster? <a href="AlderWood_DogIntake_WebForm.html" style="color:var(--forest); font-weight:600;">Fill out the full intake form &rarr;</a></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-name">Alderwood Pet Adventures</div>
+  <div class="footer-area">Mill Creek &middot; Bothell &middot; Lynnwood &middot; Everett &middot; Edmonds</div>
+  <a href="tel:2063992676" class="footer-phone">(206) 399-2676</a>
+  <div class="footer-tagline">"Rooted here. Ready for anything."</div>
+</footer>
+
+<script>
+  // Show success state if Formspree redirects back with ?success
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("success") === "true") {
+    document.getElementById("contact-form").style.display = "none";
+    document.getElementById("success-state").style.display = "block";
+  }
+</script>
+
+</body>
+</html>
